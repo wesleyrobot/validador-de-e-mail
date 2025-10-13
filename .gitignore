@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Arquivos sensíveis
+.env
+*.log
+
+# Diretórios de dados
+uploads/
+results/
+logs/
+
+# Temporários
+*.tmp
+*.bak
+*.backup
+*.swp
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Backups
+*.backup_*
+contact_api.py.backup*
+streamlit_app.py.backup*

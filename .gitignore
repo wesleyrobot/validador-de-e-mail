@@ -37,3 +37,6 @@ Thumbs.db
 *.backup_*
 contact_api.py.backup*
 streamlit_app.py.backup*
+
+# Arquivo com IP de produção - NÃO enviar para GitHub
+streamlit_app.py

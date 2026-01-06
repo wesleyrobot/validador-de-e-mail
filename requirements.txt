@@ -1,44 +1,4 @@
-# ===== BACKEND API =====
-fastapi==0.109.0
-uvicorn[standard]==0.27.0
-python-multipart==0.0.6
-pydantic==2.5.3
-
-# ===== PROCESSAMENTO DE DADOS =====
-pandas==2.1.4
-openpyxl==3.1.2
-xlrd==2.0.1
-
-# ===== VALIDAÇÃO E DNS =====
-dnspython==2.4.2
-email-validator==2.1.0
-
-# ===== NLP E CATEGORIZAÇÃO =====
-spacy==3.7.2
-# Para instalar modelo português: python -m spacy download pt_core_news_sm
-# Para instalar modelo inglês: python -m spacy download en_core_web_sm
-
-# ===== NORMALIZAÇÃO =====
-phonenumbers==8.13.27
-rapidfuzz==3.6.1
-
-# ===== CACHE E FILAS (OPCIONAL) =====
-redis==5.0.1
-celery==5.3.4
-
-# ===== FRONTEND =====
-streamlit==1.29.0
-plotly==5.18.0
-
-# ===== DATABASE (OPCIONAL) =====
-psycopg2-binary==2.9.9
-sqlalchemy==2.0.25
-
-# ===== UTILITÁRIOS =====
-requests==2.31.0
-python-dotenv==1.0.0
-
-# ===== TESTES =====
-pytest==7.4.3
-pytest-asyncio==0.21.1
-httpx==0.26.0
+streamlit
+pandas
+openpyxl
+dnspython

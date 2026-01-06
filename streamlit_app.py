@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 
 st.set_page_config(
     page_title="Sistema de Validação de Contatos",
-    page_icon="📧",
+    page_icon="✉",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -53,7 +53,7 @@ st.markdown("""
 # Header com ícone personalizado
 st.markdown("""
 <div class="logo-container">
-    <div class="logo-icon">📊</div>
+    <div class="logo-icon">⛁</div>
     <div>
         <div class="main-header">Sistema de Gestão de Contatos</div>
         <div class="sub-header">Validação DNS/MX · Normalização Automática · Exportação Inteligente</div>
@@ -90,11 +90,7 @@ def load_all_contacts_data():
             
             with open(file_path, 'r') as f:
                 data = json.load(f)
-                # JSON é uma lista direta
-                if isinstance(data, list):
-                    contacts = data
-                else:
-                    contacts = data.get('data', data.get('contacts', []))
+                contacts = data.get('contacts', [])
                 
                 num_contacts = len(contacts)
                 all_data['total_contacts'] += num_contacts
@@ -135,7 +131,7 @@ def load_all_contacts_data():
     return all_data
 
 # Criar abas
-tab1, tab2, tab3, tab4 = st.tabs(["🏠 Dashboard", "📤 Upload", "📊 Resultados", "⚙️ Config"])
+tab1, tab2, tab3, tab4 = st.tabs(["⛁ Dashboard", "⬆ Upload", "▣ Resultados", "⚙ Config"])
 
 # ============================================
 # TAB 1 - DASHBOARD
@@ -166,14 +162,14 @@ with tab1:
     with col3:
         taxa_validacao = (data['valid_emails'] / data['total_contacts'] * 100) if data['total_contacts'] > 0 else 0
         st.metric(
-            "✅ Taxa de Validação",
+            "✓ Taxa de Validação",
             f"{taxa_validacao:.1f}%",
             help="Percentual de e-mails válidos"
         )
     
     with col4:
         st.metric(
-            "📧 E-mails Válidos",
+            "✉ E-mails Válidos",
             f"{data['valid_emails']:,}",
             help="Total de e-mails com DNS/MX válido"
         )
@@ -184,11 +180,11 @@ with tab1:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("📊 Distribuição de Validação")
+        st.subheader("▣ Distribuição de Validação")
         
         if data['total_contacts'] > 0:
             validation_data = {
-                'Status': ['✅ Válidos', '❌ Inválidos', '⚠️ Sintaxe Apenas'],
+                'Status': ['✓ Válidos', '✗ Inválidos', '⚠ Sintaxe Apenas'],
                 'Quantidade': [data['valid_emails'], data['invalid_emails'], data['syntax_only']],
                 'Cor': ['#22c55e', '#ef4444', '#f59e0b']
             }
@@ -213,19 +209,19 @@ with tab1:
             st.info("📭 Nenhum dado disponível ainda")
     
     with col2:
-        st.subheader("📈 Estatísticas Detalhadas")
+        st.subheader("▲ Estatísticas Detalhadas")
         
-        st.metric("✅ E-mails Válidos", f"{data['valid_emails']:,}", 
+        st.metric("✓ E-mails Válidos", f"{data['valid_emails']:,}", 
                   delta=f"{taxa_validacao:.1f}% do total")
         
-        st.metric("❌ E-mails Inválidos", f"{data['invalid_emails']:,}",
+        st.metric("✗ E-mails Inválidos", f"{data['invalid_emails']:,}",
                   delta=f"{(data['invalid_emails']/data['total_contacts']*100) if data['total_contacts'] > 0 else 0:.1f}% do total")
         
-        st.metric("⚠️ Sintaxe Apenas", f"{data['syntax_only']:,}",
+        st.metric("⚠ Sintaxe Apenas", f"{data['syntax_only']:,}",
                   delta=f"{(data['syntax_only']/data['total_contacts']*100) if data['total_contacts'] > 0 else 0:.1f}% do total")
         
         media_por_lista = data['total_contacts'] / data['total_listas'] if data['total_listas'] > 0 else 0
-        st.metric("📊 Média por Lista", f"{media_por_lista:,.0f} contatos")
+        st.metric("▣ Média por Lista", f"{media_por_lista:,.0f} contatos")
     
     st.markdown("---")
     
@@ -236,7 +232,7 @@ with tab1:
         df_contacts = pd.DataFrame(data['recent_contacts'])
         
         df_display = df_contacts[['date_str', 'contact_id_short', 'total', 'valid', 'invalid', 'syntax', 'taxa_validacao']]
-        df_display.columns = ['Data', 'ID da Lista', 'Total', '✅ Válidos', '❌ Inválidos', '⚠️ Sintaxe', 'Taxa']
+        df_display.columns = ['Data', 'ID da Lista', 'Total', '✓ Válidos', '✗ Inválidos', '⚠ Sintaxe', 'Taxa']
         
         st.dataframe(
             df_display,
@@ -246,16 +242,16 @@ with tab1:
                 "Data": st.column_config.TextColumn("Data", width="medium"),
                 "ID da Lista": st.column_config.TextColumn("ID da Lista", width="medium"),
                 "Total": st.column_config.NumberColumn("Total", format="%d"),
-                "✅ Válidos": st.column_config.NumberColumn("✅ Válidos", format="%d"),
-                "❌ Inválidos": st.column_config.NumberColumn("❌ Inválidos", format="%d"),
-                "⚠️ Sintaxe": st.column_config.NumberColumn("⚠️ Sintaxe", format="%d"),
+                "✓ Válidos": st.column_config.NumberColumn("✓ Válidos", format="%d"),
+                "✗ Inválidos": st.column_config.NumberColumn("✗ Inválidos", format="%d"),
+                "⚠ Sintaxe": st.column_config.NumberColumn("⚠ Sintaxe", format="%d"),
                 "Taxa": st.column_config.TextColumn("Taxa Validação", width="small"),
             }
         )
         
         # Gráfico de evolução
         if len(data['recent_contacts']) > 1:
-            st.subheader("📈 Evolução da Taxa de Validação")
+            st.subheader("▲ Evolução da Taxa de Validação")
             
             df_evolution = df_contacts.copy()
             df_evolution['taxa_num'] = df_evolution['valid'] / df_evolution['total'] * 100
@@ -283,15 +279,15 @@ with tab1:
     
     with col1:
         st.subheader("🔧 Status dos Serviços")
-        st.success("✅ API FastAPI")
-        st.success("✅ Validação DNS")
-        st.success("✅ Processamento")
-        st.success("✅ Nginx")
+        st.success("✓ API FastAPI")
+        st.success("✓ Validação DNS")
+        st.success("✓ Processamento")
+        st.success("✓ Nginx")
     
     with col2:
-        st.subheader("📊 Capacidades")
+        st.subheader("▣ Capacidades")
         st.info("📁 Max: 100MB")
-        st.info("📧 ~1000 emails/min")
+        st.info("✉ ~1000 emails/min")
         st.info("📤 CSV, XLSX, XLS")
         st.info("💾 XLSX, CSV")
     
@@ -301,11 +297,11 @@ with tab1:
             if taxa_validacao >= 80:
                 st.success(f"🌟 Excelente: {taxa_validacao:.1f}%")
             elif taxa_validacao >= 60:
-                st.warning(f"⚠️ Boa: {taxa_validacao:.1f}%")
+                st.warning(f"⚠ Boa: {taxa_validacao:.1f}%")
             else:
-                st.error(f"❌ Baixa: {taxa_validacao:.1f}%")
+                st.error(f"✗ Baixa: {taxa_validacao:.1f}%")
             
-            st.info(f"📊 {data['valid_emails']:,} emails validados")
+            st.info(f"▣ {data['valid_emails']:,} emails validados")
             st.info(f"🎯 {data['total_listas']} listas completas")
         else:
             st.info("Aguardando dados...")
@@ -335,7 +331,7 @@ with tab2:
         with col1:
             st.metric("📄 Arquivo", uploaded_file.name)
         with col2:
-            st.metric("📊 Tamanho", f"{uploaded_file.size / 1024:.2f} KB")
+            st.metric("▣ Tamanho", f"{uploaded_file.size / 1024:.2f} KB")
         with col3:
             st.metric("📁 Tipo", uploaded_file.type.split('/')[-1].upper())
         
@@ -349,7 +345,7 @@ with tab2:
                         data = response.json()
                         job_id = data["job_id"]
                         
-                        st.success(f"✅ Upload realizado com sucesso!")
+                        st.success(f"✓ Upload realizado com sucesso!")
                         st.code(job_id, language=None)
                         st.session_state['current_job_id'] = job_id
                         
@@ -375,9 +371,9 @@ with tab2:
                                 progress_bar.progress(progress / 100)
                                 status_text.markdown(f"**Status:** {status.upper()} - {progress}% completo")
                                 
-                                metric1.metric("📊 Progresso", f"{progress}%")
-                                metric2.metric("✅ Processados", f"{processed:,}")
-                                metric3.metric("📧 Total", f"{total:,}")
+                                metric1.metric("▣ Progresso", f"{progress}%")
+                                metric2.metric("✓ Processados", f"{processed:,}")
+                                metric3.metric("✉ Total", f"{total:,}")
                                 
                                 if status == "done":
                                     st.success("🎉 Processamento concluído com sucesso!")
@@ -385,17 +381,17 @@ with tab2:
                                     st.info(f"💡 Vá para a aba **Resultados** e cole o ID: `{job_id}`")
                                     break
                                 elif status == "error":
-                                    st.error("❌ Erro no processamento!")
+                                    st.error("✗ Erro no processamento!")
                                     break
                                 
                                 time.sleep(2)
                             except Exception as e:
-                                st.error(f"❌ Erro: {str(e)}")
+                                st.error(f"✗ Erro: {str(e)}")
                                 break
                     else:
-                        st.error(f"❌ Erro no upload: {response.status_code}")
+                        st.error(f"✗ Erro no upload: {response.status_code}")
                 except Exception as e:
-                    st.error(f"❌ Erro: {str(e)}")
+                    st.error(f"✗ Erro: {str(e)}")
 
 # TAB 3 e 4 continuam iguais ao código anterior...
 # (mantendo o resto do código igual)
@@ -404,7 +400,7 @@ with tab2:
 # TAB 3 - RESULTADOS
 # ============================================
 with tab3:
-    st.header("📊 Resultados do Processamento")
+    st.header("▣ Resultados do Processamento")
     
     job_id = st.text_input("🔑 ID da Lista", placeholder="Cole o ID aqui", key="job_id_input")
     
@@ -426,24 +422,24 @@ with tab3:
                     
                     col1, col2, col3, col4 = st.columns(4)
                     with col1:
-                        st.metric("📊 Status", status.upper())
+                        st.metric("▣ Status", status.upper())
                     with col2:
-                        st.metric("📈 Progresso", f"{progress}%")
+                        st.metric("▲ Progresso", f"{progress}%")
                     with col3:
-                        st.metric("✅ Processados", f"{processed:,}")
+                        st.metric("✓ Processados", f"{processed:,}")
                     with col4:
-                        st.metric("📧 Total", f"{total:,}")
+                        st.metric("✉ Total", f"{total:,}")
                     
                     st.progress(progress / 100)
                     
                     if status == "done":
-                        st.success("✅ PROCESSAMENTO CONCLUÍDO")
+                        st.success("✓ PROCESSAMENTO CONCLUÍDO")
                         
                         results_response = requests.get(f"http://138.197.145.84/api/results/{job_id}?limit=5000", timeout=30)
                         
                         if results_response.status_code == 200:
                             results_data = results_response.json()
-                            contacts = results_data.get("data", [])
+                            contacts = results_data.get("contacts", [])
                             
                             if contacts:
                                 df = pd.DataFrame(contacts)
@@ -460,13 +456,13 @@ with tab3:
                                     syntax_count = status_counts.get('syntax_only', 0)
                                     
                                     with col1:
-                                        st.metric("✅ Válidos", f"{valid_count:,}", 
+                                        st.metric("✓ Válidos", f"{valid_count:,}", 
                                                 delta=f"{(valid_count/len(df)*100):.1f}% do total")
                                     with col2:
-                                        st.metric("❌ Inválidos", f"{invalid_count:,}",
+                                        st.metric("✗ Inválidos", f"{invalid_count:,}",
                                                 delta=f"{(invalid_count/len(df)*100):.1f}% do total")
                                     with col3:
-                                        st.metric("⚠️ Sintaxe", f"{syntax_count:,}",
+                                        st.metric("⚠ Sintaxe", f"{syntax_count:,}",
                                                 delta=f"{(syntax_count/len(df)*100):.1f}% do total")
                                 
                                 st.markdown("### 📋 Dados Processados")
@@ -485,9 +481,9 @@ with tab3:
                                     st.markdown(f"[⬇️ Baixar Excel Filtrado](http://138.197.145.84/api/download/{job_id}/filtered?format=xlsx&valid_only=true)")
                                     st.markdown(f"[⬇️ Baixar CSV Filtrado](http://138.197.145.84/api/download/{job_id}/filtered?format=csv&valid_only=true)")
                 else:
-                    st.error("❌ Lista não encontrada!")
+                    st.error("✗ Lista não encontrada!")
         except Exception as e:
-            st.error(f"❌ Erro: {str(e)}")
+            st.error(f"✗ Erro: {str(e)}")
 
 # ============================================
 # TAB 4 - CONFIG
@@ -501,15 +497,15 @@ with tab4:
         st.subheader("🔧 Configurações")
         st.markdown("""
         **Limites:**
-        - 📁 Tamanho: **100MB**
-        - 👥 Contatos: **100,000**
-        - ⏱️ Timeout: **3600s**
+        - Tamanho: **100MB**
+        - Contatos: **100,000**
+        - Timeout: **3600s**
         
         **Funcionalidades:**
-        - ✅ Validação DNS
-        - ✅ Validação MX  
-        - ✅ Processamento assíncrono
-        - ✅ Cache habilitado
+        - • Validação DNS
+        - • Validação MX  
+        - • Processamento assíncrono
+        - • Cache habilitado
         """)
     
     with col2:
